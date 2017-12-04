@@ -1,1 +1,6 @@
-docker build -f docker/Dockerfile-dev -t bowhead-dev docker/ && docker run --name=bowhead-dev -p 127.0.0.1:8080:8080 -v "$(pwd)":/var/www/bowhead bowhead-dev
+docker build -f docker/Dockerfile-dev -t bowhead-dev docker/ && \
+docker run --name=bowhead-dev \
+-p 127.0.0.1:8080:8080 \
+-p 127.0.0.1:3306:3306 \
+-p 127.0.0.1:6379:6379 \
+-v "$(pwd)":/var/www/bowhead bowhead-dev

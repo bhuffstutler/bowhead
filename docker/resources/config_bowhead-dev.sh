@@ -5,6 +5,10 @@
 # docker build -t bowhead docker/ && docker run --name=bowhead -p 127.0.0.1:8080:8080 bowhead
 #
 
+# Bind redis-server and mysql to 0.0.0.0 for dev
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/my.cnf
+
 phpenmod trader
 phpenmod mcrypt
 service php7.1-fpm start
@@ -18,6 +22,9 @@ popd
 
 mysqladmin -u root password password
 echo "CREATE DATABASE bowhead;" | mysql -u root -ppassword
+# Allow root access to mysql from remote hosts for dev
+echo "update mysql.user set host='%' where user='root' and host='localhost';" | mysql -u root -ppassword
+echo "flush privileges;" | mysql -u root -ppassword
 
 #cd /var/www
 #git clone https://github.com/joeldg/bowhead.git

@@ -64,6 +64,10 @@ RUN usermod -u 1000 www-data
 EXPOSE 8080
 EXPOSE 2049
 EXPOSE 20048
+# MySQL
+EXPOSE 3306
+# Redis
+EXPOSE 6379
 
 #
 # supervisord with nodaemon=true
