@@ -67,7 +67,7 @@ def demo(displayHeartbeat):
                 return
 
             if "prices" in msg or displayHeartbeat:
-                fifo=open('quotes','a')
+                fifo=open('../quotes','a')
                 fifo.write(line + "\n")
                 #print(line)
 

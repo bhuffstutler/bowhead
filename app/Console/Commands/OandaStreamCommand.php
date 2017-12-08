@@ -62,7 +62,7 @@ class OandaStreamCommand extends Command
                 return null;
             }
 
-            $pipeB = fopen("quotes",'r');
+            $pipeB = fopen("../quotes",'r');
             $line = fgets($pipeB);
             $results = json_decode($line);
 

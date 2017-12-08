@@ -45,7 +45,10 @@ cp .env.example .env
 
 ln -s /var/www/bowhead/public /var/www/html/bowhead
 
-mkfifo quotes
+#mkfifo quotes
+# Put quotes named pipe in /var/www as a workaround for Windows based development
+mkfifo /var/www/quotes
+
 mysql -u root -ppassword -D bowhead < app/Scripts/DBdump.sql
 
 #php artisan bowhead:example_usage
