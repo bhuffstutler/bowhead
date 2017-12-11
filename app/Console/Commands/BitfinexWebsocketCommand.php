@@ -46,6 +46,11 @@ class BitfinexWebsocketCommand extends Command
     public $channels = array();
 
     /**
+     * @var int
+     */
+    protected $stamp;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -102,6 +107,7 @@ class BitfinexWebsocketCommand extends Command
                 $askPrice = (($askPrice > $price) ? $askPrice : $price);
             }else {
                 echo "ASK error!\n";
+                \Log::warning("BitfinexWebsocketCommand: ASK error!");
             }
         }
         if(\Cache::has('bitfinex::book::bid')){
@@ -112,6 +118,7 @@ class BitfinexWebsocketCommand extends Command
                 $bidPrice = (($bidPrice > $price) ? $bidPrice : $price);
             } else {
                 echo "BID error!\n";
+                \Log::warning("BitfinexWebsocketCommand: BID error!");
             }
         }
         if (\Cache::has('bitfinex::ticker::last_price')) {
@@ -197,6 +204,7 @@ class BitfinexWebsocketCommand extends Command
                      *   match up sequence and keep the book up to date.
                      */
                     \Cache::put('bitfinex::running', time(), 1);
+                    $this->stamp = time();
 
                     $data = json_decode($msg,1);
                     if ((!empty($data['event']) && $data['event'] == 'subscribed') ? true : false) {
@@ -371,6 +379,14 @@ class BitfinexWebsocketCommand extends Command
                 echo "Could not connect: {$e->getMessage()}\n";
                 $loop->stop();
             });
+
+        $loop->addPeriodicTimer(15, function() use ($loop){
+           if ((time() - $this->stamp) > 15 ){
+               echo "No recent messages. Stopping.";
+               \Log::error("BitfinexWebsocketCommand: No messages received for over 15 seconds. Stopping.");
+               $loop->stop();
+           }
+        });
 
         $loop->run();
     }

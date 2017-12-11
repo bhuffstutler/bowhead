@@ -457,7 +457,7 @@ trait OHLC
 	   } else {
 	 	/** Check for missing periods **/
 		if ($periodSize == '1m') {
-		   $variance = (int)75;
+		   $variance = (int)85;
 		} else if ($periodSize == '5m') {
 		   $variance = (int)375;
 		} else if ($periodSize == '15m') {
